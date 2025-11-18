@@ -122,7 +122,8 @@
 
 
 // exercise 4
-import React from "react";
+// exercise 4
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -133,6 +134,8 @@ import {
 } from "react-native";
 
 export default function App() {
+    const [selectedItem, setSelectedItem] = useState(null);
+
     const datasource = [
         {
             title: "🍔 Foods",
@@ -151,7 +154,7 @@ export default function App() {
 
         {
             title: "🥤 Drinks",
-            color: "#ddecff",
+            color: "#dfddffff",
             data: [
                 {
                     name: "Milk Tea",
@@ -173,16 +176,33 @@ export default function App() {
         },
     ];
 
-    const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.card}>
-            <Text style={styles.cardText}>{item.name}</Text>
+    const renderItem = ({ item }) => {
+        const isSelected = selectedItem === item.name;
 
-            <Image
-                source={typeof item.img === "string" ? { uri: item.img } : item.img}
-                style={styles.cardImage}
-            />
-        </TouchableOpacity>
-    );
+        return (
+            <TouchableOpacity
+                style={[
+                    styles.card,
+                    isSelected && { backgroundColor: "#c44ae2a6" }, // highlight color
+                ]}
+                onPress={() => setSelectedItem(item.name)}
+            >
+                <Text
+                    style={[
+                        styles.cardText,
+                        isSelected && { color: "white" }, // white text when selected
+                    ]}
+                >
+                    {item.name}
+                </Text>
+
+                <Image
+                    source={typeof item.img === "string" ? { uri: item.img } : item.img}
+                    style={styles.cardImage}
+                />
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -198,6 +218,14 @@ export default function App() {
                     </View>
                 )}
             />
+
+            {selectedItem && (
+                <View style={styles.selectionBox}>
+                    <Text style={styles.selectionText}>
+                        You selected: ⭐ {selectedItem}
+                    </Text>
+                </View>
+            )}
         </View>
     );
 }
@@ -207,7 +235,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 40,
         paddingHorizontal: 15,
-        backgroundColor: "#f0f7ff",
+        backgroundColor: "#f5258695",
     },
 
     title: {
@@ -248,5 +276,18 @@ const styles = StyleSheet.create({
         width: 110,
         height: 110,
         borderRadius: 10,
+    },
+
+    selectionBox: {
+        padding: 12,
+        backgroundColor: "#9d2a2aff",
+        borderRadius: 10,
+        marginTop: 10,
+    },
+
+    selectionText: {
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
     },
 });
